@@ -17,7 +17,7 @@ jobs:
       - name: Run
         run: |
           go get github.com/yuin/goldmark
-          go run cmd/main.go
+          go run ${GITHUB_WORKSPACE}/cmd/main.go
           
       - name: Commit
         run: |
