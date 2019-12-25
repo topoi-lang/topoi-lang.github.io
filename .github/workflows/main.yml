@@ -1,0 +1,27 @@
+name: GitHub Page
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v1
+
+      - name: Run
+        run: |
+          go get github.com/yuin/goldmark
+          go run cmd/main.go
+          
+      - name: Commit
+        run: |
+           git config --global user.name "GitHub"
+           git add ${GITHUB_WORKSPACE}/index.html
+           git commit -m "committing my-docs"
+           git push -u origin master
