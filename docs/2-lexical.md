@@ -58,13 +58,14 @@ assignable
   | destructurable
 
 destructurable
-  = "{" {identifier [":" type] [":=" assignable] ["=" expression]","}* "}"
+  = "{" {identifier [":" type] [":=" assignable] ["=" expression]","}* ["..." identifier] "}"
 
 expression
   = function_abstraction
   | function_application
   | identifier
   | record
+  | adt_construction
 
 function_abstraction
   = "{" {assignable "->" expression ","}+ "}"
@@ -73,8 +74,18 @@ function_application
   = expression expression
   | expression "." expression
 
+adt_construction
+  = constructor expression
+
 record
-  = "{" {identifier [":" type] ":=" expression ","}*"}"
+  = "{" {record_body ","}*"}"
+
+record_body
+  = identifier [":" type] [":=" expression]
+  | spread_expression
+
+spread_expression
+  = "..." expression
 
 type
   = identifier
