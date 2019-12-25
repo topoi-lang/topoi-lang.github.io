@@ -12,15 +12,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@master
-      
+
       - name: Install Go
         uses: actions/setup-go@v1
 
       - name: Run
         run: |
           go get github.com/yuin/goldmark
-          go run ./main.go
-          
+          go run ./cmd/main.go
+
       - name: Commit
         run: |
            git config --global user.name "GitHub"
