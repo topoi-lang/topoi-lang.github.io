@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="A type-safe functional programming language that aims to be terse, small core functionality and simple, featuring dependent type and type inference.">
+    <meta name="og:description" content="A type-safe functional programming language that aims to be terse, small core functionality and simple, featuring dependent type and type inference.">
+    <meta property="og:title" content="The Topoi Programming Language">
+    <meta property="twitter:card" content="summary">
+    <meta property="og:type" content="website">
+    <title>Topoi Programming Language</title>
+    <link rel="stylesheet" type="text/css" href="Inter (Web)/inter.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>The Topoi Programming Language</h1>
+        <div class="flexbox">
+            <div class="left">
+                <h2>Reasonable, sound, and friendly. Write terser code.</h2>
+                <p>A type-safe functional programming language that aims to be terse, small core functionality and simple, featuring dependent type and type inference.</p>
+            </div>
+            <div class="right">
+                <a href="https://github.com/topoi-lang"><button class="btn">View source on GitHub</button></a>
+                <small>
+                    This project is still WIP implementation of these ideas.
+                </small>
+                <small>
+                    If you are interested, please support the project via stars. Thank you for your time and generosity.</small> 
+                </small>
+            </div>
+        </div>
+    </header>
+    <main>
+    <!-- content starts here -->
+    <section id="1-foreword">
+<h1 id="foreword">Foreword</h1>
+<p>This document is intended as a reference manual for the Topoi language.
+It lists the language constructs, and gives their precise syntax and informal semantics.
+It is by no means a tutorial introduction to the language.</p>
+<blockquote>
+<p>In future we will make a proper landing page for the language.
+But right now it serves as our internal team's draft.</p>
+</blockquote>
+<h2 id="notations">Notations</h2>
+<p>The syntax of the languages is given in BNF-like notation.</p>
+<p>Where square brackets <code>[...]</code> denote optional components, curly brackets <code>{...}</code> denotes zero, one or several repetitions of the encolesd components.</p>
+<p>Curly brackets with a trailing asterisk sign <code>{...}*</code> denote one or several repetitions of the encolosed components.</p>
+<p>Parentheses <code>(...)</code> denote grouping of components.</p>
+</section>
+<section id="2-lexical">
+<h2 id="identifier-and-keywords">Identifier and Keywords</h2>
+<pre><code>identifier           ::= letter (letter | &quot;_&quot; | &quot;'&quot; )* | &quot;_&quot; identifier
+qualified_identifier ::= (identifier &quot;.&quot;)+
+</code></pre>
+<p>When referencing something inside a module or a record, or a tuple, we use a qualified name (<code>qualified_identifier</code>).</p>
+<h3 id="comment-and-documentation">Comment and Documentation</h3>
+<pre><code>prefix                 ::= letter (letter | &quot;_&quot; | &quot;'&quot; )* | &quot;_&quot; prefix
+
+comment                ::= &quot;--&quot; (char)* newline
+doc_comment            ::= &quot;--|&quot; (char)* newline
+prefixed_doc_comment   ::= &quot;--|&quot; prefix &quot;|&quot; (char)* newline
+block_comment          ::= &quot;--[&quot; (char)* &quot;]--&quot;
+prefixed_block_comment ::= &quot;--[&quot; prefix &quot;|&quot; (char)* &quot;]--&quot; 
+</code></pre>
+<p>Content enclosed in documentation comment (<code>doc_comment</code>) and prefixed block comment (<code>prefixed_block_comment</code>) are conversed in AST and will be output or generated as web content.</p>
+<p>The prefix is just a name that will let compiler pass to know what generator used to process the content inside the doc comment or block comment. eg.: LaTex, KaTeX, markdown...</p>
+</section>
+
+    <!-- content ends here -->
+    </main>
+</body>
+</html>
