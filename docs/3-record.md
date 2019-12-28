@@ -16,7 +16,7 @@ Examples of non-empty records:
 Each property of a record can so be optionally typed, to ensure that the property will be initiated with the correct type.
 
 ```go
-(name : String := "topoi", age := "0")
+(name : String = "topoi", age := "0")
 ```
 
 We can also construct nested record:
@@ -44,8 +44,7 @@ The property of each record can be destructured, and be populated in the current
 ```
 Note that not all of the properties need to be destructured.
 ```hs
-(name) := (name := "topoi", age := "0
-)
+(name) := (name := "topoi", age := "0")
 ```
 Also, the destructuring order does not matter:
 ```hs

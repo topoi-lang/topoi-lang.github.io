@@ -179,7 +179,7 @@ Each record are enclosed by round brackets.</p>
 <pre><code class="language-go">(name := &quot;topoi&quot;, age := &quot;12&quot;)
 </code></pre>
 <p>Each property of a record can so be optionally typed, to ensure that the property will be initiated with the correct type.</p>
-<pre><code class="language-go">(name : String := &quot;topoi&quot;, age := &quot;0&quot;)
+<pre><code class="language-go">(name : String = &quot;topoi&quot;, age := &quot;0&quot;)
 </code></pre>
 <p>We can also construct nested record:</p>
 <pre><code class="language-go">(
@@ -199,8 +199,7 @@ has the type of <code>(name: String, age: String)</code></p>
 -- `name` and `age` will be exposed to the current environment as named variables
 </code></pre>
 <p>Note that not all of the properties need to be destructured.</p>
-<pre><code class="language-hs">(name) := (name := &quot;topoi&quot;, age := &quot;0
-)
+<pre><code class="language-hs">(name) := (name := &quot;topoi&quot;, age := &quot;0&quot;)
 </code></pre>
 <p>Also, the destructuring order does not matter:</p>
 <pre><code class="language-hs">(age, name) := (name := &quot;topoi&quot;, age := &quot;0&quot;)
