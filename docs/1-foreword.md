@@ -16,3 +16,9 @@ Where square brackets `[...]` denote optional components, curly brackets `{...}`
 Curly brackets with a trailing asterisk sign `{...}*` denote one or several repetitions of the encolosed components.
 
 Parentheses `(...)` denote grouping of components.
+
+|Notation|Repetition|
+|-|-|
+|`{...}?`|0 or 1|
+|`{...}*`|0 or more|
+|`{...}+`|1 or more|
