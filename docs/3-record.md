@@ -30,6 +30,9 @@ We can also construct nested record:
 )
 ```
 
+### Shorthand construction
+Suppose we have two variables `x` and `y`, to create a record like `(x := x, y := y)`, we can instead write as `(x, y)`. This feature can prevent property mismatch like `(x := y, y := y)`.
+
 ### Record Type
 
 The type of each record can be inferred by the Topoi type system, for example  `(name := "topoi", age := "12")`
