@@ -58,7 +58,10 @@ assignable
   | destructurable
 
 destructurable
-  = "{" {identifier [":" type] [":=" assignable] ["=" expression]","}* ["..." identifier] "}"
+  = "(" 
+    {identifier [":" type] ["as" assignable]","}* 
+    ["..." identifier] 
+  ")"
 
 expression
   = function_abstraction
@@ -71,14 +74,10 @@ function_abstraction
   = "{" {assignable "->" expression ","}+ "}"
 
 function_application
-  = expression expression
-  | expression "." expression
-
-adt_construction
-  = constructor expression
+  = expression "." expression
 
 record
-  = "{" {record_body ","}*"}"
+  = "(" {record_body ","}*")"
 
 record_body
   = identifier [":" type] [":=" expression]
@@ -97,10 +96,10 @@ type_function_application
   = function_application
 
 function_type
-  = record_type "->" type
+  = record_type "->" (record_type|function_type)
 
 record_type
-  = "{" {identifier [":" type]}* "}"
+  = "(" {identifier [":" type]}* ")"
 
 type_definition
   =  "type" identifier [":" type ":=" type_body]
