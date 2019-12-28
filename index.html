@@ -43,25 +43,264 @@ But right now it serves as our internal team's draft.</p>
 <p>Where square brackets <code>[...]</code> denote optional components, curly brackets <code>{...}</code> denotes zero, one or several repetitions of the encolesd components.</p>
 <p>Curly brackets with a trailing asterisk sign <code>{...}*</code> denote one or several repetitions of the encolosed components.</p>
 <p>Parentheses <code>(...)</code> denote grouping of components.</p>
+<table>
+<thead>
+<tr>
+<th>Notation</th>
+<th>Repetition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{...}?</code></td>
+<td>0 or 1</td>
+</tr>
+<tr>
+<td><code>{...}*</code></td>
+<td>0 or more</td>
+</tr>
+<tr>
+<td><code>{...}+</code></td>
+<td>1 or more</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="2-lexical">
 <h2 id="identifier-and-keywords">Identifier and Keywords</h2>
-<pre><code>identifier           ::= letter (letter | &quot;_&quot; | &quot;'&quot; )* | &quot;_&quot; identifier
-qualified_identifier ::= (identifier &quot;.&quot;)+
+<pre><code>identifier           
+  = letter (letter | &quot;_&quot; | &quot;'&quot; )* 
+  | &quot;_&quot; identifier
+
+qualified_identifier 
+  = (identifier &quot;.&quot;)+
 </code></pre>
 <p>When referencing something inside a module or a record, or a tuple, we use a qualified name (<code>qualified_identifier</code>).</p>
 <h3 id="comment-and-documentation">Comment and Documentation</h3>
-<pre><code>prefix                 ::= letter (letter | &quot;_&quot; | &quot;'&quot; )* | &quot;_&quot; prefix
+<pre><code>prefix                 
+  = letter (letter | &quot;_&quot; | &quot;'&quot; )* 
+  | &quot;_&quot; prefix
 
-comment                ::= &quot;--&quot; (char)* newline
-doc_comment            ::= &quot;--|&quot; (char)* newline
-prefixed_doc_comment   ::= &quot;--|&quot; prefix &quot;|&quot; (char)* newline
-block_comment          ::= &quot;--[&quot; (char)* &quot;]--&quot;
-prefixed_block_comment ::= &quot;--[&quot; prefix &quot;|&quot; (char)* &quot;]--&quot; 
+comment
+  = &quot;--&quot; (char)* newline
+
+doc_comment 
+  = &quot;--|&quot; (char)* newline
+
+prefixed_doc_comment
+  = &quot;--|&quot; prefix &quot;|&quot; (char)* newline
+
+block_comment 
+  = &quot;--[&quot; (char)* &quot;]--&quot;
+
+prefixed_block_comment 
+  = &quot;--[&quot; prefix &quot;|&quot; (char)* &quot;]--&quot; 
 </code></pre>
 <p>Content enclosed in documentation comment (<code>doc_comment</code>) and prefixed block comment (<code>prefixed_block_comment</code>) are conversed in AST and will be output or generated as web content.</p>
 <p>The prefix is just a name that will let compiler pass to know what generator used to process the content inside the doc comment or block comment. eg.: LaTex, KaTeX, markdown...</p>
 <h2 id="primitive-value-and-types">Primitive value and types</h2>
+<h2 id="full-grammar">Full Grammar</h2>
+<pre><code>program 
+  = {definition}+
+
+definition 
+  = constant_definition
+  | type_definition
+
+constant_definition
+  = assignable [&quot;:&quot; type] &quot;:=&quot; expression
+
+assignable
+  = identifier
+  | destructurable
+
+destructurable
+  = &quot;(&quot; 
+    {identifier [&quot;:&quot; type] [&quot;as&quot; assignable]&quot;,&quot;}* 
+    [&quot;...&quot; identifier] 
+  &quot;)&quot;
+
+expression
+  = function_abstraction
+  | function_application
+  | identifier
+  | record
+  | adt_construction
+
+function_abstraction
+  = &quot;{&quot; {assignable &quot;-&gt;&quot; expression &quot;,&quot;}+ &quot;}&quot;
+
+function_application
+  = expression &quot;.&quot; expression
+
+record
+  = &quot;(&quot; {record_body &quot;,&quot;}*&quot;)&quot;
+
+record_body
+  = identifier [&quot;:&quot; type] [&quot;:=&quot; expression]
+  | spread_expression
+
+spread_expression
+  = &quot;...&quot; expression
+
+type
+  = identifier
+  | function_type
+  | record_type
+  | type_function_application
+
+type_function_application
+  = function_application
+
+function_type
+  = record_type &quot;-&gt;&quot; (record_type|function_type)
+
+record_type
+  = &quot;(&quot; {identifier [&quot;:&quot; type]}* &quot;)&quot;
+
+type_definition
+  =  &quot;type&quot; identifier [&quot;:&quot; type &quot;:=&quot; type_body]
+
+type_body
+  = {&quot;|&quot; constructor [record_type] &quot;:&quot; type}+
+
+constructor
+  = identifier
+</code></pre>
+</section>
+<section id="3-record">
+<h1 id="expressions">Expressions</h1>
+<h2 id="record">Record</h2>
+<p>Record expression are key-value pairs.
+Each record are enclosed by round brackets.</p>
+<h3 id="record-construction">Record Construction</h3>
+<p>Empty record is denoted as <code>()</code>.</p>
+<p>Examples of non-empty records:</p>
+<pre><code class="language-go">(name := &quot;topoi&quot;, age := &quot;12&quot;)
+</code></pre>
+<p>Each property of a record can so be optionally typed, to ensure that the property will be initiated with the correct type.</p>
+<pre><code class="language-go">(name : String := &quot;topoi&quot;, age := &quot;0&quot;)
+</code></pre>
+<p>We can also construct nested record:</p>
+<pre><code class="language-go">(
+  name := &quot;topoi&quot;, 
+  friend := (
+    name := &quot;haskell&quot;, 
+    age := &quot;30&quot;
+  )
+)
+</code></pre>
+<h3 id="record-type">Record Type</h3>
+<p>The type of each record can be inferred by the Topoi type system, for example  <code>(name := &quot;topoi&quot;, age := &quot;12&quot;)</code>
+has the type of <code>(name: String, age: String)</code></p>
+<h3 id="record-destructuring">Record destructuring</h3>
+<p>The property of each record can be destructured, and be populated in the current environment.</p>
+<pre><code class="language-hs">(name, age) := (name := &quot;topoi&quot;, age := &quot;0&quot;)
+-- `name` and `age` will be exposed to the current environment as named variables
+</code></pre>
+<p>Note that not all of the properties need to be destructured.</p>
+<pre><code class="language-hs">(name) := (name := &quot;topoi&quot;, age := &quot;0
+)
+</code></pre>
+<p>Also, the destructuring order does not matter:</p>
+<pre><code class="language-hs">(age, name) := (name := &quot;topoi&quot;, age := &quot;0&quot;)
+</code></pre>
+<p>Besides that, we can also re-alias the property name using they keyword <code>as</code>.</p>
+<pre><code class="language-hs">(name as myName, age) = (name := &quot;topoi&quot;, age := 1)
+-- `myName` and `age` is exposed, but `name` is not
+</code></pre>
+<h2 id="accessing-properties">Accessing properties</h2>
+<p>We can do it by using the dot notation.</p>
+<pre><code>record.propertyName
+</code></pre>
+<p>For example:</p>
+<pre><code class="language-hs">me := (name := &quot;john&quot;, age := 2)
+
+myName = me.name
+</code></pre>
+<h2 id="mutating-properties">Mutating properties</h2>
+<p>In Topoi, properties mutation is not allowed, however we can use the spread notation with the triple dot operator.</p>
+<p>For example,</p>
+<pre><code class="language-hs">me := (name := &quot;john&quot;, age := 2)
+
+newMe := (...me, age := 3)
+</code></pre>
+<p>Basically it's the same as JavaScript spread operation.</p>
+<p>We can also combine the properties of multiple records into one as such:</p>
+<pre><code class="language-sh">me := (name := &quot;john&quot;, age := 2)
+otherDetail := （address := &quot;sea&quot;)
+
+fullMe = (...me, ...otherDetail)
+</code></pre>
+</section>
+<section id="4-function">
+<h1 id="function">Function</h1>
+<h2 id="constructing-function">Constructing function</h2>
+<p>We can construct an unnamed function using the <code>{arguments -&gt; body}</code> notation.</p>
+<p>However, note that the function arguments must be of record type, and the return type must also be record type or function type.</p>
+<p>For example:</p>
+<pre><code class="language-hs">add := {
+  (value: Int, by: Int) -&gt; (
+    result := 0
+  )
+}
+</code></pre>
+<h2 id="function-type">Function type</h2>
+<p>Each function has a type, for example, the <code>add</code> function above has the type of:</p>
+<pre><code>(value: Int, by: Int) -&gt; (result: Int)
+</code></pre>
+<p>Because of that, we can also define the <code>add</code> function as such:</p>
+<pre><code class="language-hs">add 
+  : (value: Int, by: Int) -&gt; (result: Int)
+  = {
+    (value, by) -&gt; (result := 0)
+  }
+</code></pre>
+<h2 id="using-function">Using function</h2>
+<p>In Topoi, we can use (a.k.a. apply) a function using the following notation (note that this is the only allowed notation):</p>
+<pre><code>arg1.func(arg2 := value1, arg3 := value2, ...)
+</code></pre>
+<p>Note that the first argument can ignore the property name, and the order is not important.</p>
+<p>For example, the following function usage are equivalent:</p>
+<pre><code>1.add(by := 2)
+2.add(value := 1)
+(value:=1, by:=2).add
+</code></pre>
+<p>We can also chain function call:</p>
+<pre><code>1.add(by:= 2).add(by:= 3) 
+</code></pre>
+<p>Because of the dot notation, we can also directly apply an unnamed function (a.k.a. lambda) to an expression.</p>
+<pre><code>(x:=1, y:=2).{
+  (x, y) -&gt; x.add(by:=y)
+}
+</code></pre>
+<h2 id="pattern-matching-not-finalized">Pattern Matching (not finalized)</h2>
+<p>We can pattern match a value using the <code>equal</code> operator.</p>
+<p>For example:</p>
+<pre><code class="language-hs">divide : (value: Int, by: Int) -&gt; (result: Result.where(ok:= Int, fail:= String)) := {
+  (by = 0) -&gt; Result.fail(&quot;Cannot divide by 0&quot;),
+  (result, by) -&gt; (
+    result := -- something
+  )
+}
+</code></pre>
+<p>Another example:</p>
+<pre><code class="language-hs">type Shape := 
+  | Circle (radius: Float)
+  | Rectangle (height: Float, width: Float)
+  | None
+
+area: (shape: Shape) -&gt; (result: Float) := {
+  (shape = Circle(radius)) -&gt; 
+    radius.square.multiple(by:= pi),
+
+  (shape = Rectangle(height, width)) -&gt;
+    height.multiple(by:= width),
+
+  (shape = None) -&gt;
+    0
+}
+</code></pre>
 </section>
 
     <!-- content ends here -->
