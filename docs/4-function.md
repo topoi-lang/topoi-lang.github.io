@@ -63,7 +63,7 @@ For example:
 ```hs
 divide : (value: Int, by: Int) -> (result: Result.where(ok:= Int, fail:= String)) := {
   (by = 0) -> Result.fail("Cannot divide by 0"),
-  (result, by) -> (
+  (value, by) -> (
     result := -- something
   )
 }
