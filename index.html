@@ -190,6 +190,8 @@ Each record are enclosed by round brackets.</p>
   )
 )
 </code></pre>
+<h3 id="shorthand-construction">Shorthand construction</h3>
+<p>Suppose we have two variables <code>x</code> and <code>y</code>, to create a record like <code>(x := x, y := y)</code>, we can instead write as <code>(x, y)</code>. This feature can prevent property mismatch like <code>(x := y, y := y)</code>.</p>
 <h3 id="record-type">Record Type</h3>
 <p>The type of each record can be inferred by the Topoi type system, for example  <code>(name := &quot;topoi&quot;, age := &quot;12&quot;)</code>
 has the type of <code>(name: String, age: String)</code></p>
