@@ -280,7 +280,7 @@ fullMe = (...me, ...otherDetail)
 <p>For example:</p>
 <pre><code class="language-hs">divide : (value: Int, by: Int) -&gt; (result: Result.where(ok:= Int, fail:= String)) := {
   (by = 0) -&gt; Result.fail(&quot;Cannot divide by 0&quot;),
-  (result, by) -&gt; (
+  (value, by) -&gt; (
     result := -- something
   )
 }
