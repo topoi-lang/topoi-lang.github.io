@@ -1,9 +1,8 @@
 name: GitHub Page
 
 on:
-  push:
-    branches:
-      - master
+  pull_request:
+    branches: master
 
 jobs:
   build:
@@ -27,5 +26,5 @@ jobs:
         run: |
            git config --global user.name "GitHub"
            git add ${GITHUB_WORKSPACE}/index.html
-           git commit -m "publish changes"
+           git commit -m "Publish changes"
            git push -u origin master
