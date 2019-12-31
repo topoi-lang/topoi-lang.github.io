@@ -31,6 +31,6 @@ jobs:
             git commit -m "Publish changes"
             git fetch
             git checkout master
-            git merge development --allow-unrelated-histories
+            git merge -X theirs development --allow-unrelated-histories
             git push -u origin master
           fi
