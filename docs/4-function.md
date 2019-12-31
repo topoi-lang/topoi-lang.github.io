@@ -3,29 +3,27 @@
 ## Constructing function
 We can construct an unnamed function using the `{arguments -> body}` notation.
 
-However, note that the function arguments must be of record type, and the return type must also be record type or function type.
+However, note that the function arguments must be of record type, but the return type can be any type.
 
 For example:
 ```hs
 add := {
-  (value: Int, by: Int) -> (
-    result := 0
-  )
+  (value: Int, by: Int) -> 0
 }
 ```
 
 ## Function type
 Each function has a type, for example, the `add` function above has the type of:
 ```
-(value: Int, by: Int) -> (result: Int)
+(value: Int, by: Int) -> Int
 ```
 
 Because of that, we can also define the `add` function as such:
 ```hs
 add 
-  : (value: Int, by: Int) -> (result: Int)
+  : (value: Int, by: Int) -> Int
   = {
-    (value, by) -> (result := 0)
+    (value, by) -> 0
   }
 ```
 

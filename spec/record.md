@@ -36,3 +36,18 @@ Then
 ```
 C : (K1: T1, K2: T2, K3: T3)
 ```
+
+## Row type polymorphism
+Say:
+```
+a : (j: T, k: U, l: V)
+f : (x: (j: T)) -> R
+```
+then:
+```
+a . f
+```
+is invalid, because the type of `x` does not require `(k: U, l: V)`. However to allow row type polymorphism, we just need to tweak `f` to use the record type spreading:
+```
+f : (infer type: Type, x: (j: T, ...Type)) -> R
+```
