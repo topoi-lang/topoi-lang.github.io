@@ -24,10 +24,13 @@ jobs:
 
       - name: Commit
         run: |
-           git config --global user.name "GitHub"
-           git add ${GITHUB_WORKSPACE}/index.html
-           git commit -m "Publish changes"
-           git fetch
-           git checkout master
-           git merge development
-           git push -u origin master
+          # If there's new changes
+          if [[ $(git diff --stat) != '' ]]; then
+            git config --global user.name "GitHub"
+            git add ${GITHUB_WORKSPACE}/index.html
+            git commit -m "Publish changes"
+            git fetch
+            git checkout master && git pull origin master
+            git merge development
+            git push -u origin master
+          fi
