@@ -1,8 +1,8 @@
 name: GitHub Page
 
 on:
-  pull_request:
-    branches: master
+  push:
+    branches: development
 
 jobs:
   build:
