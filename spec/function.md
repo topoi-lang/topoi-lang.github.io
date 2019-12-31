@@ -9,83 +9,67 @@ In other words, every function can only receive argument with type of record and
 
 All function application in Topoi must follow the following syntax rule:
 
+### Input with 0 field
+Say:
 ```
-A . F
+f : () -> R
 ```
-or
+then invocation of `f` will be:
 ```
-A . F E
+. f
 ```
-Note that function application is left-associative (like number addition):
+and:
 ```
-A . F E . F E = (A . F E) . F E
+(. f) : R
+```
+Note that this syntax is not associative, `..f` does not mean `.(.f)`, it is simply invalid.
 
-similar to
-
-1 + 2 + 3 = (1 + 2) + 3
+### Input with 1 field
+Say:
 ```
-
-Where 
-```
-A: (any type)
-F: Function
-E: Record
-```
-
-Suppose `F`'s input type is `Record` with 1 field:
-```
-F: (K1: T1) -> R
-```
-And:
-```
-A: T1
-```
-Then:
-```
-(A . F) : R
-```
-
-
-
-Suppose `F`'s input type is `Record` with more than 1 field:
-```
-F: (K1: T1, K2: T2, K3: T3) -> R
+f: (k: T) -> R
 ```
 and
 ```
-A: T1
+e: T
 ```
-then
+then the invocation of `f` will be:
 ```
-E: (K2: T2, K3: T3)
-```
-and
-```
-(A . F E) : R
-```
-Similarly, if 
-```
-A: T2
-```
-then
-```
-E: (K1: T1, K3: T3)
+e . f
 ```
 and
 ```
-(A . F E) : R
+(e . f) : R
 ```
-And so on and so forth.
+Note that this syntax is left-associative, meaning that:
+```
+e . f . g = (e . f) . g
+```
 
-
-Suppose `F`'s input type is `Record` with 0 field:
+### Input with more than 1 fields
+Say:
 ```
-F: () -> R
+f : (j: T, k: U, l: V) -> R
 ```
-Then due to the semantical rule aformentioned, there's no way to invoke this function. However, if one wants to create a function that does not require an input, one can use the following idiom:
+and:
 ```
-F: (_: ()) -> R
-().F
+a: T
+b: U
+c: V
+```
+then the invocation of `f` can be any of the following:
+```
+a.f(k:=b, l:=c)
+b.f(j:=a, l:=c)
+c.f(j:=a, k:=b)
+```
+and all of the expression above will have the type of:
+```
+R
+```
+This syntax is also left-associative, meaning that:
+```
+a . f b . g c = (a . f b) . g c
 ```
 
 ## Relation to similar syntax
@@ -132,3 +116,9 @@ case expression of
       -- treat as normal function application 
 ```
 
+## Generic function
+Generic functions are functions which contain types that can only be inferred during invocation.
+
+However, unlike languages like Java and C#, where type variables has special syntax (e.g. in angular brackets `<T, U>`), type variables in Topoi are just like term-level expression.
+
+TBC.
