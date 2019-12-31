@@ -1,9 +1,9 @@
 ## Function construction
 The type of every function in adhere to the following constraint:
 ```
-Record -> Record
+Record -> Type
 ```
-In other words, every function can only receive argument with type of record and return value with type of record.
+In other words, every function can only receive argument with type of record but return value of any type.
 
 ## Function application
 
@@ -71,6 +71,19 @@ This syntax is also left-associative, meaning that:
 ```
 a . f b . g c = (a . f b) . g c
 ```
+
+## Example of chaining function application
+Say:
+```
+f: (a: T) -> U
+g: (c: U) -> D
+x: T
+```
+Then we can chain the application of `f` and `g` as such:
+```
+x.f.g
+```
+
 
 ## Relation to similar syntax
 By reading the specification of `Record` one may notice that the syntax of record property access and that of function application are the same. Therefore, this section aims to provide a way to compile both of this feature without ambiguity.
