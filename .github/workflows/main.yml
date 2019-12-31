@@ -27,4 +27,6 @@ jobs:
            git config --global user.name "GitHub"
            git add ${GITHUB_WORKSPACE}/index.html
            git commit -m "Publish changes"
+           git checkout master
+           git merge development
            git push -u origin master
