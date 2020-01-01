@@ -238,23 +238,21 @@ fullMe = (...me, ...otherDetail)
 <h1 id="function">Function</h1>
 <h2 id="constructing-function">Constructing function</h2>
 <p>We can construct an unnamed function using the <code>{arguments -&gt; body}</code> notation.</p>
-<p>However, note that the function arguments must be of record type, and the return type must also be record type or function type.</p>
+<p>However, note that the function arguments must be of record type, but the return type can be any type.</p>
 <p>For example:</p>
 <pre><code class="language-hs">add := {
-  (value: Int, by: Int) -&gt; (
-    result := 0
-  )
+  (value: Int, by: Int) -&gt; 0
 }
 </code></pre>
 <h2 id="function-type">Function type</h2>
 <p>Each function has a type, for example, the <code>add</code> function above has the type of:</p>
-<pre><code>(value: Int, by: Int) -&gt; (result: Int)
+<pre><code>(value: Int, by: Int) -&gt; Int
 </code></pre>
 <p>Because of that, we can also define the <code>add</code> function as such:</p>
 <pre><code class="language-hs">add 
-  : (value: Int, by: Int) -&gt; (result: Int)
+  : (value: Int, by: Int) -&gt; Int
   = {
-    (value, by) -&gt; (result := 0)
+    (value, by) -&gt; 0
   }
 </code></pre>
 <h2 id="using-function">Using function</h2>
